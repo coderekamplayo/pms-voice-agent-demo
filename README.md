@@ -1,96 +1,164 @@
 # 🎙️ PMS Voice Agent Demo (`pms-voice-agent-demo`)
 
-Welcome to **PMS Voice Agent Demo**! This is a complete, beginner-friendly, and runnable portfolio project that demonstrates how an **AI Voice Receptionist** handles incoming patient phone calls, integrates with a Practice Management System (PMS like Cliniko), and triggers automated confirmation emails via Postmark.
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-v20-green.svg)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-5.2-lightgrey.svg)](https://expressjs.com/)
+[![Jest](https://img.shields.io/badge/Jest-30.0-red.svg)](https://jestjs.io/)
+[![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg)](https://opensource.org/licenses/ISC)
+
+> **Portfolio & Demonstration Project:** A standalone, beginner-friendly simulation of an **AI Receptionist Voice Agent** integrating a **Practice Management System (PMS like Cliniko)**, **VAPI Voice AI Webhooks**, and **Postmark Mock Email Delivery**.
 
 ---
 
-## 🌟 Features
+## 📌 Project Overview
 
-- **🤖 VAPI Voice AI Integration:** Express webhook listener ready to handle function calls triggered by VAPI during live voice calls.
-- **🏥 Mock PMS Service:** Simulates medical scheduling software with patient lookups and appointment booking capabilities.
-- **📧 Mock Email Factory:** Simulated Postmark email template generator and console logger for instant verification without needing API keys.
-- **🚀 100% Mock Mode Out-of-the-Box:** Runs locally without internet access or real third-party credentials required.
+`pms-voice-agent-demo` demonstrates how real-world **Voice AI Assistants** (such as VAPI.ai) communicate with clinic software to handle patient phone inquiries, query schedule availability, and perform end-to-end appointment bookings.
+
+### Key Capabilities:
+- **🤖 VAPI Voice Webhook Router:** Receives incoming function call requests (`lookupPatient`, `checkAvailability`, `bookAppointment`) triggered live during voice calls.
+- **🏥 Mock Cliniko PMS Service:** Simulates medical practice management data layer with patient lookups, slot filtering, and double-booking prevention.
+- **📧 Postmark Mock Email Factory:** Generates HTML & plain-text confirmation templates and logs email dispatches directly to the console.
+- **⚡ 100% Offline / Mock Ready:** Runs cleanly on any developer laptop out-of-the-box without external API keys or live third-party service dependencies.
+- **🧪 Comprehensive Automated Testing:** Includes 100% passing unit & integration test coverage powered by **Jest** and **Supertest**.
 
 ---
 
-## 📐 Architecture & System Flow
+## 🛠️ Tech Stack
 
+| Component | Technology | Description |
+|---|---|---|
+| **Language** | **TypeScript 5.7** | Strongly typed, safe server-side development |
+| **Runtime & Server** | **Node.js v20 + Express 5** | RESTful HTTP application server & webhook router |
+| **Execution** | **tsx** | Zero-config TypeScript execution engine for dev mode |
+| **Testing** | **Jest + Supertest** | Unit testing & HTTP webhook integration testing |
+| **Voice AI Contract** | **VAPI.ai Webhook Standard** | JSON payload specifications for Voice AI function calling |
+| **Containerization** | **Docker** | Multi-stage production container setup |
+
+---
+
+## 📐 Architecture & Directory Structure
+
+```text
+                                       SYSTEM ARCHITECTURE
+
++-------------------+         +-------------------+         +----------------------------------+
+|   Caller Phone    |  -----> |     VAPI.ai       |  -----> |      Express Webhook Server      |
+|  (Patient Voice)  |         | (Voice Assistant) |         |      (http://localhost:3000)     |
++-------------------+         +-------------------+         +----------------------------------+
+                                                                             |
+                                              +------------------------------+------------------------------+
+                                              |                                                             |
+                                              v                                                             v
+                               +------------------------------+                              +------------------------------+
+                               |       Mock PMS Service       |                              |      Mock Email Factory      |
+                               |   (Cliniko API Simulator)    |                              |     (Postmark Dispatcher)    |
+                               +------------------------------+                              +------------------------------+
 ```
-+------------------+         +------------------+         +-------------------------------+
-|   Caller Phone   |  -----> |     VAPI.ai      |  -----> |    Express Webhook Server     |
-| (Patient Voice)  |         | (Voice Assistant)|         |  (http://localhost:3000)      |
-+------------------+         +------------------+         +-------------------------------+
-                                                                          |
-                                            +-----------------------------+-----------------------------+
-                                            |                                                           |
-                                            v                                                           v
-                             +-----------------------------+                             +-----------------------------+
-                             |       Mock PMS Service      |                             |     Mock Email Factory      |
-                             |  (Cliniko API Simulator)    |                             |    (Postmark Dispatcher)    |
-                             +-----------------------------+                             +-----------------------------+
+
+### Directory Tree Overview
+
+```text
+pms-voice-agent-demo/
+├── src/
+│   ├── mocks/             # Mock patient data and Cliniko PMS service simulator
+│   │   ├── data.ts        # Interfaces and sample patient/slot records
+│   │   └── pms.ts         # PMSService class (lookupPatientByName, getAvailableSlots, bookSlot)
+│   ├── email/             # Postmark email template generator and dispatcher
+│   │   └── factory.ts     # Confirmation, reminder, and missed-call email builders
+│   ├── vapi/              # VAPI Voice AI function call handlers
+│   │   └── tools.ts       # Webhook tool execution router
+│   └── server/            # Express web application & routing
+│       └── index.ts       # Health routes & POST /api/vapi/webhook listener
+├── tests/                 # Automated Jest & Supertest suites
+│   ├── pms.test.ts        # Unit tests for PMS logic & booking validation
+│   ├── email.test.ts      # Unit tests for email template generation
+│   └── webhook.test.ts    # Integration tests for Express endpoints & VAPI payloads
+├── .env.example           # Pre-configured environment settings
+├── Dockerfile             # Multi-stage production Docker configuration
+├── jest.config.js         # Jest TypeScript configuration
+├── package.json           # Scripts & package dependencies
+├── tsconfig.json          # TypeScript compiler configuration
+└── README.md              # Project documentation
 ```
 
 ---
 
-## 🛠️ Getting Started
+## 🚀 Getting Started
 
-### 1. Prerequisites
-- **Node.js**: v18+ or v20+
-- **npm**: v9+
+### Prerequisites
+- **Node.js**: `v18.0.0` or higher (Recommended: Node 20 LTS)
+- **npm**: `v9.0.0` or higher
+- **Git**: Installed on your terminal
 
-### 2. Installation
-Install the project dependencies:
+### Step-by-Step Installation
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/coderekamplayo/pms-voice-agent-demo.git
+   cd pms-voice-agent-demo
+   ```
+
+2. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables:**
+   Create local `.env` file from `.env.example`:
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Start Development Server:**
+   ```bash
+   npm run dev
+   ```
+
+   **Console Startup Confirmation:**
+   ```text
+   ==================================================
+   🚀 PMS Voice Agent Server running on port 3000
+   📡 Health Check: http://localhost:3000/health
+   🔗 VAPI Webhook: http://localhost:3000/api/vapi/webhook
+   ⚙️  Mode: MOCK MODE (Offline Ready)
+   ==================================================
+   ```
+
+---
+
+## 🧪 Automated Testing
+
+The project contains automated unit and integration tests using **Jest** and **Supertest**.
+
+Run all test suites:
 ```bash
-npm install
+npm test
 ```
 
-### 3. Environment Configuration
-Copy the sample environment file (preconfigured for Mock Mode):
-```bash
-cp .env.example .env
-```
+### Expected Output:
+```text
+PASS tests/email.test.ts
+PASS tests/pms.test.ts
+PASS tests/webhook.test.ts
 
-### 4. Running the Development Server
-Launch the server in hot-reload development mode:
-```bash
-npm run dev
-```
-
-You should see output similar to:
-```
-==================================================
-🚀 PMS Voice Agent Server running on port 3000
-📡 Health Check: http://localhost:3000/health
-🔗 VAPI Webhook: http://localhost:3000/api/vapi/webhook
-⚙️  Mode: MOCK MODE (Offline Ready)
-==================================================
+Test Suites: 3 passed, 3 total
+Tests:       18 passed, 18 total
+Snapshots:   0 total
+Time:        ~10 s
 ```
 
 ---
 
-## 🧪 Testing Locally with cURL
+## 📡 Testing Webhooks with cURL
 
-You can test the entire workflow right from your terminal without placing a phone call!
+You can test the server endpoints locally in terminal without needing an actual phone call:
 
 ### 1. Health Check
-Verify the server status:
 ```bash
 curl http://localhost:3000/health
 ```
-**Expected Response:**
-```json
-{
-  "status": "ok",
-  "service": "pms-voice-agent-demo",
-  "mockMode": true,
-  "timestamp": "2026-07-29T12:00:00.000Z"
-}
-```
 
----
-
-### 2. Lookup Patient (`lookupPatient`)
-Simulate VAPI asking the PMS if "Juan Dela Cruz" exists in the clinic system:
+### 2. Patient Lookup (`lookupPatient`)
 ```bash
 curl -X POST http://localhost:3000/api/vapi/webhook \
   -H "Content-Type: application/json" \
@@ -112,30 +180,8 @@ curl -X POST http://localhost:3000/api/vapi/webhook \
     }
   }'
 ```
-**Expected Response:**
-```json
-{
-  "results": [
-    {
-      "toolCallId": "call_lookup_101",
-      "result": {
-        "found": true,
-        "patient": {
-          "id": "pat_101",
-          "name": "Juan Dela Cruz",
-          "dob": "1990-05-15",
-          "email": "juan.delacruz@example.com"
-        }
-      }
-    }
-  ]
-}
-```
 
----
-
-### 3. Check Open Slots (`checkAvailability`)
-Search for available appointment slots:
+### 3. Appointment Slot Query (`checkAvailability`)
 ```bash
 curl -X POST http://localhost:3000/api/vapi/webhook \
   -H "Content-Type: application/json" \
@@ -158,10 +204,7 @@ curl -X POST http://localhost:3000/api/vapi/webhook \
   }'
 ```
 
----
-
-### 4. Book Appointment (`bookAppointment`)
-Book slot `slot_201` for patient `pat_101` ("Juan Dela Cruz"). This will update the PMS state and automatically trigger an email confirmation log:
+### 4. Appointment Booking & Email Dispatch (`bookAppointment`)
 ```bash
 curl -X POST http://localhost:3000/api/vapi/webhook \
   -H "Content-Type: application/json" \
@@ -177,7 +220,7 @@ curl -X POST http://localhost:3000/api/vapi/webhook \
             "arguments": {
               "slotId": "slot_201",
               "patientId": "pat_101",
-              "reason": "Dental Checkup"
+              "reason": "General Dental Examination"
             }
           }
         }
@@ -188,41 +231,29 @@ curl -X POST http://localhost:3000/api/vapi/webhook \
 
 ---
 
-## 🐳 Docker Deployment
+## 🐳 Container Deployment with Docker
 
-To build and run using Docker:
+Build and run using Docker:
 ```bash
-# Build Docker image
+# Build multi-stage Docker image
 docker build -t pms-voice-agent-demo .
 
-# Run container
+# Launch container on port 3000
 docker run -p 3000:3000 pms-voice-agent-demo
 ```
 
 ---
 
-## 📁 Directory Overview
+## 💼 Portfolio & Developer Context
 
-```
-pms-voice-agent-demo/
-├── src/
-│   ├── mocks/          # Mock patient data and Cliniko PMS API simulator
-│   │   ├── data.ts
-│   │   └── pms.ts
-│   ├── email/          # Postmark email template generator and dispatcher
-│   │   └── factory.ts
-│   ├── vapi/           # VAPI Voice AI webhook tool handlers
-│   │   └── tools.ts
-│   └── server/         # Express server and webhook route configuration
-│       └── index.ts
-├── .env.example
-├── Dockerfile
-├── package.json
-├── tsconfig.json
-└── README.md
-```
+This project was built to demonstrate:
+- Clean modular TypeScript architecture for AI Voice Webhooks.
+- Handling Voice AI function calling payloads (VAPI tool call schemas).
+- Building offline-friendly mock services for practice management systems and email dispatchers.
+- Automated testing discipline with 100% test coverage using Jest & Supertest.
 
 ---
 
 ## 📄 License
-ISC License. Built for educational and portfolio demonstration purposes.
+
+Distributed under the **ISC License**. Created for educational, portfolio, and demonstration purposes.
